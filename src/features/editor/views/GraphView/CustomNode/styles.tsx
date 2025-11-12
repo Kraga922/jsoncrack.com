@@ -52,6 +52,13 @@ export const StyledForeignObject = styled.foreignObject<{ $isObject?: boolean }>
     height: 100%;
     overflow: hidden;
     cursor: pointer;
+    pointer-events: auto;
+  }
+
+  /* Enable pointer events for interactive elements */
+  input,
+  button {
+    pointer-events: auto;
   }
 `;
 

@@ -45,12 +45,7 @@ const Node = ({ node, x, y }: CustomNodeProps) => {
           <StyledImage src={JSON.stringify(text[0].value)} width="70" height="70" loading="lazy" />
         </StyledImageWrapper>
       ) : (
-        <StyledTextNodeWrapper
-          data-x={x}
-          data-y={y}
-          data-key={JSON.stringify(text)}
-          $isParent={false}
-        >
+        <StyledTextNodeWrapper data-x={x} data-y={y} data-key={JSON.stringify(text)} $isParent={false}>
           <Styled.StyledKey $value={value} $type={typeof text[0].value}>
             <TextRenderer>{value}</TextRenderer>
           </Styled.StyledKey>

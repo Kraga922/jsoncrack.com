@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import type { CustomNodeProps } from ".";
 import { NODE_DIMENSIONS } from "../../../../../constants/graph";
 import type { NodeData } from "../../../../../types/graph";
@@ -10,9 +11,11 @@ type RowProps = {
   x: number;
   y: number;
   index: number;
+  nodeId: string;
+  nodePath: any;
 };
 
-const Row = ({ row, x, y, index }: RowProps) => {
+const Row = ({ row, x, y, index, nodeId, nodePath }: RowProps) => {
   const rowPosition = index * NODE_DIMENSIONS.ROW_HEIGHT;
 
   const getRowText = () => {
@@ -28,8 +31,10 @@ const Row = ({ row, x, y, index }: RowProps) => {
       data-x={x}
       data-y={y + rowPosition}
     >
-      <Styled.StyledKey $type="object">{row.key}: </Styled.StyledKey>
-      <TextRenderer>{getRowText()}</TextRenderer>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Styled.StyledKey $type="object">{row.key}: </Styled.StyledKey>
+        <TextRenderer>{getRowText()}</TextRenderer>
+      </div>
     </Styled.StyledRow>
   );
 };
@@ -44,7 +49,15 @@ const Node = ({ node, x, y }: CustomNodeProps) => (
     $isObject
   >
     {node.text.map((row, index) => (
-      <Row key={`${node.id}-${index}`} row={row} x={x} y={y} index={index} />
+      <Row 
+        key={`${node.id}-${index}`} 
+        row={row} 
+        x={x} 
+        y={y} 
+        index={index}
+        nodeId={node.id}
+        nodePath={node.path}
+      />
     ))}
   </Styled.StyledForeignObject>
 );

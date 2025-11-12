@@ -2,8 +2,10 @@ import type { ViewPort } from "react-zoomable-ui/dist/ViewPort";
 import type { CanvasDirection } from "reaflow/dist/layout/elkLayout";
 import { create } from "zustand";
 import { SUPPORTED_LIMIT } from "../../../../../constants/graph";
+import useFile from "../../../../../store/useFile";
 import useJson from "../../../../../store/useJson";
 import type { EdgeData, NodeData } from "../../../../../types/graph";
+import { updateValueAtPath } from "../../../../../lib/utils/updateNodeValue";
 import { parser } from "../lib/jsonParser";
 
 export interface Graph {
@@ -43,6 +45,7 @@ interface GraphActions {
   centerView: () => void;
   clearGraph: () => void;
   setZoomFactor: (zoomFactor: number) => void;
+  editNodeValue: (node: NodeData, newValue: string) => void;
 }
 
 const useGraph = create<Graph & GraphActions>((set, get) => ({
@@ -101,6 +104,15 @@ const useGraph = create<Graph & GraphActions>((set, get) => ({
   },
   toggleFullscreen: fullscreen => set({ fullscreen }),
   setViewPort: viewPort => set({ viewPort }),
+  editNodeValue: (node: NodeData, newValue: string) => {
+    const currentJson = useJson.getState().json;
+    const updatedJson = updateValueAtPath(currentJson, node.path, newValue);
+    
+    if (updatedJson !== currentJson) {
+      // Update the file contents which will trigger graph update
+      useFile.getState().setContents({ contents: updatedJson });
+    }
+  },
 }));
 
 export default useGraph;
